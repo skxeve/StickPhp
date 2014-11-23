@@ -51,7 +51,7 @@ class Logger extends AbstractLogger
                 try {
                     $config = Config::get()->getConfig($logger, $section);
                 } catch (\Stick\config\ConfigException $e) {
-                    self::get(false)->warning('Failed to get logger config '.var_export($section, true).' - '.$e->getMessage());
+                    self::get(false)->warning('Failed to get logger config '.var_export($section, true));
                     $config = null;
                 }
             }
