@@ -1,6 +1,8 @@
 <?php
 namespace Stick\manager;
 
+use Stick\view\IndexView;
+
 class ViewManager extends \Stick\AbstractObject
 {
     const CHAR = 'UTF-8';
@@ -88,7 +90,13 @@ class ViewManager extends \Stick\AbstractObject
         }
 
         // View
-        $index = $this->getView('index');
+        try {
+            $index = $this->getView('index');
+        } catch (ManagerException $e) {
+            $this->getLogger()->debug('Catch ManagerException: ' . $e->getMessage());
+            $index = new IndexView();
+            $index->init();
+        }
         $param = array();
         foreach ($this->view as $key => $view) {
             $param[$key] = (string)$view;

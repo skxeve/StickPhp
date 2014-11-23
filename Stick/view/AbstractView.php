@@ -12,6 +12,11 @@ abstract class AbstractView extends \Stick\AbstractObject implements InterfaceVi
 
     public function __toString()
     {
-        return $this->getContent();
+        try {
+            return $this->getContent();
+        } catch (ViewException $e) {
+            $this->getLogger()->warning($e->getMessage());
+            return '';
+        }
     }
 }

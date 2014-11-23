@@ -73,24 +73,31 @@ class Config extends \Stick\AbstractObject
      *
      * @param obj $obj instance
      * @param string $section Section name
+     * @param boolean $ex Exception flag(default true)
      *
      * @throw ConfigException
      */
-    public function getConfig($obj = null, $section = null)
+    public function getConfig($obj = null, $section = null, $ex = true)
     {
         $prefix = null;
         if ($obj instanceof \Stick\log\Logger) {
             $prefix = 'logger';
+        } elseif ($obj instanceof \Stick\dao\Template) {
+            $prefix = 'template';
         } elseif (is_string($obj)) {
             $prefix = (string)$obj;
         }
         if ($prefix !== null) {
-            return $this->findConfig($prefix, $section);
+            return $this->findConfig($prefix, $section, $ex);
         }
-        throw new ConfigException('Unexpected config parameter.');
+        if ($ex) {
+            throw new ConfigException('Unexpected config parameter.');
+        } else {
+            return false;
+        }
     }
 
-    protected function findConfig($prefix, $section)
+    protected function findConfig($prefix, $section, $ex)
     {
         $key = $prefix;
         if (!empty($section)) {
@@ -105,6 +112,10 @@ class Config extends \Stick\AbstractObject
                 $this->getLogger()->debug('Cannot find '.var_export($key, true).' in '.$path);
             }
         }
-        throw new ConfigException('Cannot find config ' . var_export($key, true));
+        if ($ex) {
+            throw new ConfigException('Cannot find config ' . var_export($key, true));
+        } else {
+            return false;
+        }
     }
 }
