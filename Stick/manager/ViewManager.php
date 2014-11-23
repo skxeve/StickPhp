@@ -90,7 +90,7 @@ class ViewManager extends \Stick\AbstractObject
         }
 
         // View
-        if (isset($this->view['index']) {
+        if (isset($this->view['index'])) {
             $index = $this->getView('index');
         } else {
             $index = new IndexView();
