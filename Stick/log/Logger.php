@@ -57,14 +57,15 @@ class Logger extends AbstractLogger
             }
 
             $writable = false;
-            if ($config !== null) {
-                if (is_dir($config['path'])) {
+            if ($config !== null && isset($config['path'])) {
+                $p = $config['path'];
+                if (is_dir($p)) {
                     $path .= '/' . date(self::$filedate) . '.log';
                 }
 
-                if (preg_match('/^php:\/\//', $config['path'])) {
+                if (preg_match('/^php:\/\//', $p)) {
                     $writable = true;
-                } elseif (is_writable($config['path']) || (!file_exists($config['path']) && is_writable(dirname($config['path'])))) {
+                } elseif (is_writable($p) || (!file_exists($p) && is_writable(dirname($p)))) {
                     $writable = true;
                 }
             }

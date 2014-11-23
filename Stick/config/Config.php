@@ -100,7 +100,7 @@ class Config extends \Stick\AbstractObject
             $key .= " $section";
         }
         $ret = null;
-        foreach($this->data as $path => $ini) {
+        foreach ($this->data as $path => $ini) {
             try {
                 $ret = $ini->getValue($key);
                 return $ret;

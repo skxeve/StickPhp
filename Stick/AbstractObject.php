@@ -35,7 +35,10 @@ abstract class AbstractObject
      */
     public function __get($name)
     {
-        file_put_contents('php://stderr', 'Warning: Force read cannot property ' . get_class($this) . '->' . $name . "\n");
+        file_put_contents(
+            'php://stderr',
+            'Warning: Force read cannot property ' . get_class($this) . '->' . $name . "\n"
+        );
         return $this->$name;
     }
 }
