@@ -4,7 +4,6 @@ namespace Stick\dao;
 class Template extends \Stick\AbstractObject
 {
     protected $path;
-    protected $param;
 
     public function init($path)
     {
@@ -21,27 +20,17 @@ class Template extends \Stick\AbstractObject
         $this->path = $fullpath;
     }
 
-    public function setParam(array $param)
-    {
-        $this->param = $param;
-    }
-
-    public function getTemplate()
+    public function getValue($param)
     {
         if (is_file($this->path)) {
             $this->getLogger()->debug('getTemplate '.$this->path);
-            extract($this->param);
+            extract($param);
             ob_start();
             ob_implicit_flush(0);
             include($this->path);
             return ob_get_clean();
         } else {
-            return false;
+            throw new DaoException('Unexpected error '.var_export($this->path, true));
         }
-    }
-
-    public function __toString()
-    {
-        return $this->getTemplate();
     }
 }
