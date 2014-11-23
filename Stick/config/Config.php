@@ -78,14 +78,15 @@ class Config extends \Stick\AbstractObject
      */
     public function getConfig($obj = null, $section = null)
     {
+        $prefix = null;
         if ($obj instanceof \Stick\log\Logger) {
-            return $this->findConfig('logger', $section);
+            $prefix = 'logger';
+        } elseif (is_string($obj)) {
+            $prefix = (string)$obj;
         }
-
-        if (is_string($obj)) {
-            return $this->findConfig((string)$obj, $section);
+        if ($prefix !== null) {
+            return $this->findConfig($prefix, $section);
         }
-
         throw new ConfigException('Unexpected config parameter.');
     }
 
