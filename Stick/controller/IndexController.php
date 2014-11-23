@@ -5,13 +5,12 @@ use Stick\manager\ViewManager;
 
 class IndexController extends AbstractController
 {
-    protected $view;
-
     protected function preExecute()
     {
         parent::preExecute();
-        $this->view = new ViewManager;
-        $this->view->init();
+        $view = new ViewManager;
+        $view->init();
+        $this->setView($view);
     }
 
     protected function mainExecute()
@@ -22,6 +21,6 @@ class IndexController extends AbstractController
     protected function postExecute()
     {
         parent::postExecute();
-        $this->view->execute();
+        $this->getView()->execute();
     }
 }
