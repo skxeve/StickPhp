@@ -109,7 +109,6 @@ class Config extends \Stick\AbstractObject
                 $ret = $ini->getValue($key);
                 return $ret;
             } catch (\Stick\dao\DaoException $e) {
-                $this->getLogger()->debug('Cannot find '.var_export($key, true).' in '.$path);
             }
         }
         if ($ex) {

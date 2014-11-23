@@ -20,16 +20,18 @@ abstract class AbstractController extends \Stick\AbstractObject
         }
     }
 
-    public function getView($view)
+    public function getView()
     {
         return $this->view;
     }
 
-    public function execute()
+    final public function execute()
     {
+        $this->getLogger()->info('Start execute '.get_class($this));
         $this->preExecute();
         $this->mainExecute();
         $this->postExecute();
+        $this->getLogger()->info('End execute '.get_class($this));
     }
 
     protected function preExecute()

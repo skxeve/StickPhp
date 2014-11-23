@@ -93,7 +93,6 @@ class ViewManager extends \Stick\AbstractObject
         try {
             $index = $this->getView('index');
         } catch (ManagerException $e) {
-            $this->getLogger()->debug('Catch ManagerException: ' . $e->getMessage());
             $index = new IndexView();
             $index->init();
         }
