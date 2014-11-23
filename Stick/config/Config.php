@@ -54,17 +54,14 @@ class Config extends \Stick\AbstractObject
                 }
                 $ini = new Ini;
                 try {
-                    $include = $ini->init($path)->getValue('include');
+                    $ini->init($path);
                 } catch (\Stick\dao\DaoException $e) {
                     throw new ConfigException('Catch DaoException: ' . $e->getMessage());
                 }
                 $this->data[$path] = $ini;
-                if (is_array($include)) {
-                    foreach ($include as $item) {
-                        $this->load($item);
-                    }
-                } else {
-                    $this->load($include);
+                try {
+                    $this->load($ini->getValue('include'));
+                } catch (\Stick\dao\DaoException $e) {
                 }
             }
         }
