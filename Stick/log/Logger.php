@@ -113,13 +113,15 @@ class Logger extends AbstractLogger
             return;
         }
         $trace = debug_backtrace();
-        $log = sprintf(
-            $this->format,
-            $this->pid,
-            date($this->date),
-            strtoupper($level_str),
-            $message
-        );
-        file_put_contents($this->path, $log, FILE_APPEND | LOCK_EX);
+        foreach (explode("\n", preg_replace("/\r\n/", "\n", $message)) as $line) {
+            $log = sprintf(
+                $this->format,
+                $this->pid,
+                date($this->date),
+                strtoupper($level_str),
+                $line
+            );
+            file_put_contents($this->path, $log, FILE_APPEND | LOCK_EX);
+        }
     }
 }

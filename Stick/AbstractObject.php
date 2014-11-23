@@ -1,7 +1,7 @@
 <?php
 namespace Stick;
 
-use Stick\log\Logger;
+use Stick\config\Config;
 
 abstract class AbstractObject
 {
@@ -14,7 +14,12 @@ abstract class AbstractObject
      */
     protected function getLogger($section = null)
     {
-        return Logger::get($section);
+        if (Config::$log_instance instanceof \Psr\Log\AbstractLogger) {
+            return Config::$log_instance;
+        } else {
+            $logclass = Config::DEFAULT_LOG_CLASS;
+            return $logclass::get($section);
+        }
     }
 
     /**

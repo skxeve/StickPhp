@@ -5,6 +5,9 @@ use Stick\dao\Ini;
 
 class Config extends \Stick\AbstractObject
 {
+    const DEFAULT_LOG_CLASS = '\\Stick\\log\\Logger';
+    public static $log_instance = null;
+
     protected static $instance = null;
 
     public static function get()
