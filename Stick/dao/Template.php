@@ -11,26 +11,41 @@ class Template extends \Stick\AbstractObject
 
     public function init($path, $section = null)
     {
-        $this->root = '';
+        $this->root = array('');
         try {
             $config = Config::get()->getConfig($this);
             if (isset($config['root'])) {
-                $this->root = $config['root'];
+                if (is_array($config['root'])) {
+                    $this->root = $config['root'];
+                } else {
+                    $this->root = array($config['root']);
+                }
+                $this->root[] = '';
             }
         } catch (ConfigException $e) {
             $this->getLogger()->debug('Catch ConfigException: ' . $e->getMessage());
         }
-        $fullpath = stream_resolve_include_path($this->root . $path);
-        if ($fullpath === false) {
-            throw new DaoException('Is not found '.var_export($this->root . $path, true));
+        $this->path = null;
+        foreach ($this->root as $root) {
+            $fullpath = stream_resolve_include_path($root . $path);
+            if ($fullpath === false) {
+                $this->getLogger()->debug('Is not found '.var_export($root . $path, true));
+                continue;
+            }
+            if (!is_readable($fullpath)) {
+                $this->getLogger()->debug('Is not readable '.var_export($fullpath, true));
+                continue;
+            }
+            if (!is_file($fullpath)) {
+                $this->getLogger()->debug('Is not file '.var_export($fullpath, true));
+                continue;
+            }
+            $this->path = $fullpath;
+            break;
         }
-        if (!is_readable($fullpath)) {
-            throw new DaoException('Is not readable '.var_export($fullpath, true));
+        if ($this->path === null) {
+            throw new DaoException('Failed to resolve path '.$path);
         }
-        if (!is_file($fullpath)) {
-            throw new DaoException('Is not file '.var_export($fullpath, true));
-        }
-        $this->path = $fullpath;
     }
 
     public function getValue($param)
