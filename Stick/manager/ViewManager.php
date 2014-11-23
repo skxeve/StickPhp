@@ -90,9 +90,9 @@ class ViewManager extends \Stick\AbstractObject
         }
 
         // View
-        try {
+        if (isset($this->view['index']) {
             $index = $this->getView('index');
-        } catch (ManagerException $e) {
+        } else {
             $index = new IndexView();
             $index->init();
         }
@@ -102,5 +102,18 @@ class ViewManager extends \Stick\AbstractObject
         }
         $index->setParam($param);
         echo (string)$index;
+    }
+
+    public function errorExecute()
+    {
+        $this->getLogger()->warning(__METHOD__);
+        echo <<<EOM
+<html>
+<body>
+<h1>Error</h1>
+<p>Unexpected error, please contact administrator.</p>
+</body>
+</html>
+EOM;
     }
 }

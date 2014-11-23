@@ -28,9 +28,14 @@ abstract class AbstractController extends \Stick\AbstractObject
     final public function execute()
     {
         $this->getLogger()->info('Start execute '.get_class($this));
-        $this->preExecute();
-        $this->mainExecute();
-        $this->postExecute();
+        try {
+            $this->preExecute();
+            $this->mainExecute();
+            $this->postExecute();
+        } catch (\Exception $e) {
+            $this->getLogger()->warning('Catch ' . get_class($e) . ' : ' . $e->getMessage());
+            $this->getView()->errorExecute();
+        }
         $this->getLogger()->info('End execute '.get_class($this));
     }
 
