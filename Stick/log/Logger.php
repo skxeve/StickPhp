@@ -58,11 +58,11 @@ class Logger extends AbstractLogger
 
             $writable = false;
             if ($config !== null && isset($config['path'])) {
-                $p = $config['path'];
-                if (is_dir($p)) {
-                    $path .= '/' . date(self::$filedate) . '.log';
+                if (is_dir($config['path'])) {
+                    $config['path'] .= '/' . date(self::$filedate) . '.log';
                 }
 
+                $p = $config['path'];
                 if (preg_match('/^php:\/\//', $p)) {
                     $writable = true;
                 } elseif (is_writable($p) || (!file_exists($p) && is_writable(dirname($p)))) {
@@ -70,7 +70,8 @@ class Logger extends AbstractLogger
                 }
             }
             if (!$writable) {
-                return self::get(false);
+                $key = 'false';
+                $config['path'] = self::DEFAULT_PATH;
             }
 
             $logger->init($config);
@@ -92,7 +93,7 @@ class Logger extends AbstractLogger
     protected function init($config)
     {
         $this->pid      = getmypid();
-        $this->path     = isset($config['path'])    ? $config['path']   : null;
+        $this->path     = isset($config['path'])    ? $config['path']   : self::DEFAULT_PATH;
         $this->level    = isset($config['level'])   ? $config['level']  : self::DEFAULT_LEVEL;
         if (!is_numeric($this->level)) {
             $this->level = array_search(strtolower($this->level), self::$level);
