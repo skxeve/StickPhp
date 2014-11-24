@@ -6,8 +6,7 @@ if (isset($header)) {
     echo $header;
 }
 ?>
-<title>
-<?php
+<title><?php
 if (isset($title)) {
     echo $title;
 }
