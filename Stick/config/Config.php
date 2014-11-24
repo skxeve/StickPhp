@@ -84,6 +84,8 @@ class Config extends \Stick\AbstractObject
             $prefix = 'logger';
         } elseif ($obj instanceof \Stick\dao\Template) {
             $prefix = 'template';
+        } elseif ($obj instanceof \Stick\controller\AbstractController) {
+            $prefix = 'controller';
         } elseif (is_string($obj)) {
             $prefix = (string)$obj;
         }

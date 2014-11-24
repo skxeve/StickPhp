@@ -33,7 +33,8 @@ abstract class AbstractController extends \Stick\AbstractObject
             $this->mainExecute();
             $this->postExecute();
         } catch (\Exception $e) {
-            $this->getLogger()->warning('Catch ' . get_class($e) . ' : ' . $e->getMessage());
+            $this->getLogger()->error('Catch ' . get_class($e) . ' : ' . $e->getMessage());
+            $this->getLogger()->error($e->getTraceAsString());
             $this->getView()->errorExecute();
         }
         $this->getLogger()->info('End execute '.get_class($this));
