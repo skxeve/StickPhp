@@ -8,6 +8,12 @@ use Stick\view\ViewException;
 abstract class AbstractView extends \Stick\AbstractObject
 {
     protected $param;
+    protected $path;
+
+    public function setTemplate($path)
+    {
+        $this->path = $path;
+    }
 
     public function setParam(array $param)
     {
