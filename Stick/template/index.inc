@@ -18,8 +18,8 @@ if (isset($title)) {
 if (isset($content_header)) {
     echo $content_header;
 }
-if (isset($content_body)) {
-    echo $content_body;
+if (isset($content)) {
+    echo $content;
 }
 if (isset($content_footer)) {
     echo $content_footer;
