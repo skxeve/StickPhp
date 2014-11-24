@@ -11,6 +11,7 @@ class ViewManager extends \Stick\AbstractObject
     protected $header_string;
     protected $http_status;
     protected $param_flag;
+    protected $execute_flag;
 
     public function init()
     {
@@ -18,6 +19,7 @@ class ViewManager extends \Stick\AbstractObject
         $this->setContentType('text/html');
         $this->setHttpStatus(200);
         $this->enableParam(false);
+        $this->execute_flag = false;
     }
 
     public function enableParam($flag)
@@ -82,6 +84,11 @@ class ViewManager extends \Stick\AbstractObject
 
     public function execute()
     {
+        if ($this->execute_flag) {
+            $this->getLogger()->warning('Duplicate execute ' . get_class($this));
+            return;
+        }
+        $this->execute_flag = true;
         // Header
         if ($this->param_flag) {
             header($this->header_string, true, $this->http_status);
@@ -106,7 +113,12 @@ class ViewManager extends \Stick\AbstractObject
 
     public function errorExecute()
     {
-        $this->getLogger()->warning(__METHOD__);
+        $this->getLogger()->warning('Start ' . __METHOD__);
+        if ($this->execute_flag) {
+            $this->getLogger()->warning('Duplicate execute ' . get_class($this));
+            return;
+        }
+        $this->execute_flag = true;
         echo <<<EOM
 <html>
 <body>

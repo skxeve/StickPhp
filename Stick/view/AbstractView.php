@@ -10,14 +10,27 @@ abstract class AbstractView extends \Stick\AbstractObject
     protected $param;
     protected $path;
 
+    public function init()
+    {
+        if (defined('static::TEMPLATE_PATH')) {
+            $this->setTemplate(static::TEMPLATE_PATH);
+        }
+    }
+
     public function setTemplate($path)
     {
-        $this->path = $path;
+        if (is_string($path)) {
+            $this->path = $path;
+        }
     }
 
     public function setParam(array $param)
     {
-        $this->param = $param;
+        if (is_array($this->param)) {
+            $this->param = array_merge($this->param, $param);
+        } else {
+            $this->param = $param;
+        }
     }
 
     public function getContent()

@@ -10,25 +10,7 @@ abstract class AbstractController extends \Stick\AbstractObject
     protected $start_msec;
     protected $end_msec;
 
-    public function setView($view)
-    {
-        if ($view instanceof ViewManager) {
-            $this->view = $view;
-        } else {
-            if (is_object($view)) {
-                throw new ControllerException('Unexpected instance '.get_class($view));
-            } else {
-                throw new ControllerException('Unexpected valuable '.var_export($view, true));
-            }
-        }
-    }
-
-    public function getView()
-    {
-        return $this->view;
-    }
-
-    final public function execute()
+    public function execute()
     {
         $this->start_msec = microtime();
         $this->getLogger()->info('Start execute ' . get_class($this));
@@ -60,4 +42,23 @@ abstract class AbstractController extends \Stick\AbstractObject
     {
         $this->getLogger()->debug(get_class($this) . '->postExecute');
     }
+
+    public function setView($view)
+    {
+        if ($view instanceof ViewManager) {
+            $this->view = $view;
+        } else {
+            if (is_object($view)) {
+                throw new ControllerException('Unexpected instance '.get_class($view));
+            } else {
+                throw new ControllerException('Unexpected valuable '.var_export($view, true));
+            }
+        }
+    }
+
+    public function getView()
+    {
+        return $this->view;
+    }
+
 }
