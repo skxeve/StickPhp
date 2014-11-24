@@ -47,7 +47,7 @@ abstract class AbstractHtmlController extends AbstractController
         if (!empty($this->site_title)) {
             $site_title = $this->site_title;
         } elseif (defined('static::DEFAULT_SITE_TITLE')) {
-            $sub_title = static::DEFAULT_SITE_TITLE;
+            $site_title = static::DEFAULT_SITE_TITLE;
         } else {
             $site_title = '';
         }
@@ -103,7 +103,6 @@ abstract class AbstractHtmlController extends AbstractController
         } else {
             $local_files = array();
         }
-        $this->getLogger()->debug($type . ' -> ' . var_export($global_files, true));
         return array_merge($global_files, $local_files);
     }
 
