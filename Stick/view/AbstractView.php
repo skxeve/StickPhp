@@ -5,7 +5,7 @@ use Stick\dao\Template;
 use Stick\dao\DaoException;
 use Stick\view\ViewException;
 
-abstract class AbstractView extends \Stick\AbstractObject implements InterfaceView
+abstract class AbstractView extends \Stick\AbstractObject
 {
     protected $param;
 
