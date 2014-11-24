@@ -48,11 +48,13 @@ class Template extends \Stick\AbstractObject
         }
     }
 
-    public function getValue($param)
+    public function getValue($param = null)
     {
         if (is_file($this->path)) {
             $this->getLogger()->debug('getTemplate '.$this->path);
-            extract($param);
+            if (is_array($param)) {
+                extract($param);
+            }
             ob_start();
             ob_implicit_flush(0);
             include($this->path);

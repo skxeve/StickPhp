@@ -16,7 +16,7 @@ if (isset($title)) {
 <body>
 <?php
 if (isset($content_header)) {
-    echo $content_hedaer;
+    echo $content_header;
 }
 if (isset($content_body)) {
     echo $content_body;

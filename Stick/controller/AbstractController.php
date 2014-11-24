@@ -2,10 +2,13 @@
 namespace Stick\controller;
 
 use Stick\manager\ViewManager;
+use Stick\lib\CalcTime;
 
 abstract class AbstractController extends \Stick\AbstractObject
 {
     protected $view;
+    protected $start_msec;
+    protected $end_msec;
 
     public function setView($view)
     {
@@ -27,7 +30,8 @@ abstract class AbstractController extends \Stick\AbstractObject
 
     final public function execute()
     {
-        $this->getLogger()->info('Start execute '.get_class($this));
+        $this->start_msec = microtime();
+        $this->getLogger()->info('Start execute ' . get_class($this));
         try {
             $this->preExecute();
             $this->mainExecute();
@@ -37,7 +41,9 @@ abstract class AbstractController extends \Stick\AbstractObject
             $this->getLogger()->error($e->getTraceAsString());
             $this->getView()->errorExecute();
         }
-        $this->getLogger()->info('End execute '.get_class($this));
+        $this->end_msec = microtime();
+        $diff_msec = CalcTime::diffMicrotime($this->end_msec, $this->start_msec);
+        $this->getLogger()->info('End execute ' . get_class($this) . ' - ' . $diff_msec . ' sec.');
     }
 
     protected function preExecute()
