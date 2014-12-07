@@ -1,12 +1,8 @@
 <?php
 namespace Stick\lib;
 
-class CalcTime
+class CalcTime extends \Stick\AbstractStatic
 {
-    protected function __construct()
-    {
-    }
-
     public static function diffMicrotime($a, $b)
     {
         list($am, $at) = explode(' ', $a);

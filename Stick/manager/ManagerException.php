@@ -1,6 +1,6 @@
 <?php
 namespace Stick\manager;
 
-class ManagerException extends \Exception
+class ManagerException extends \Stick\StickException
 {
 }

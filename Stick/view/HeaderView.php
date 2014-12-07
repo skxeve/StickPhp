@@ -9,9 +9,4 @@ class HeaderView extends AbstractView
     {
         $this->setParam(array('css' => $css));
     }
-    
-    public function setJs(array $js)
-    {
-        $this->setParam(array('js' => $js));
-    }
 }

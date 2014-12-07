@@ -3,6 +3,7 @@ namespace Stick\controller;
 
 use Stick\view\TextView;
 use Stick\view\HeaderView;
+use Stick\view\FooterView;
 
 abstract class AbstractHtmlController extends AbstractController
 {
@@ -30,10 +31,13 @@ abstract class AbstractHtmlController extends AbstractController
 
         // header view
         $header_view = new HeaderView;
-        $header_view->init();
         $header_view->setCss($this->getCss());
-        $header_view->setJs($this->getJs());
         $this->getView()->setView('header', $header_view);
+
+        // footer view
+        $footer_view = new FooterView;
+        $footer_view->setJs($this->getJs());
+        $this->getView()->setView('footer', $footer_view);
     }
 
     protected function setTitle($site_title, $sub_title = null)

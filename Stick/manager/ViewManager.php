@@ -2,6 +2,7 @@
 namespace Stick\manager;
 
 use Stick\view\IndexView;
+use Stick\view\AbstractView;
 
 class ViewManager extends \Stick\AbstractObject
 {
@@ -13,7 +14,7 @@ class ViewManager extends \Stick\AbstractObject
     protected $param_flag;
     protected $execute_flag;
 
-    public function init()
+    public function initialize()
     {
         $this->view = array();
         $this->setContentType('text/html');
@@ -69,7 +70,7 @@ class ViewManager extends \Stick\AbstractObject
         }
     }
 
-    public function setView($name, $content)
+    public function setView($name, AbstractView $content)
     {
         $this->view[$name] = $content;
     }
@@ -101,7 +102,7 @@ class ViewManager extends \Stick\AbstractObject
             $index = $this->getView('index');
         } else {
             $index = new IndexView();
-            $index->init();
+            $index->initialize();
         }
         $param = array();
         foreach ($this->view as $key => $view) {
@@ -118,7 +119,6 @@ class ViewManager extends \Stick\AbstractObject
             $this->getLogger()->warning('Duplicate execute ' . get_class($this));
             return;
         }
-        $this->execute_flag = true;
         echo <<<EOM
 <html>
 <body>
@@ -127,5 +127,6 @@ class ViewManager extends \Stick\AbstractObject
 </body>
 </html>
 EOM;
+        $this->execute_flag = true;
     }
 }

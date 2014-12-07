@@ -1,7 +1,7 @@
 <?php
 namespace Stick\dao;
 
-class Http extends \Stick\AbstractObject
+class BaseHttp extends \Stick\AbstractObject
 {
     protected static $opt_default = array(
         CURLOPT_RETURNTRANSFER  => true,
@@ -18,8 +18,11 @@ class Http extends \Stick\AbstractObject
         return $this->ch;
     }
 
-    public function init($url)
+    public function initialize($url = null)
     {
+        if ($url === null) {
+            return;
+        }
         $this->ch = curl_init($url);
         if ($this->ch === false) {
             throw new DaoException('Failed to open curl '.$url);

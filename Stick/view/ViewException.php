@@ -1,6 +1,6 @@
 <?php
 namespace Stick\view;
 
-class ViewException extends \Exception
+class ViewException extends \Stick\StickException
 {
 }

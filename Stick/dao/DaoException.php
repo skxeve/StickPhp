@@ -1,6 +1,6 @@
 <?php
 namespace Stick\dao;
 
-class DaoException extends \Exception
+class DaoException extends \Stick\StickException
 {
 }

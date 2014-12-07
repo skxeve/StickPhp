@@ -8,7 +8,7 @@ class IndexView extends AbstractView
 {
     const STICK_INDEX_TEMPLATE = 'Stick/template/index.inc';
 
-    public function init($path = null)
+    public function initialize($path = null)
     {
         if ($path !== null && is_readable($path) && is_file($path)) {
             $this->setTemplate($path);

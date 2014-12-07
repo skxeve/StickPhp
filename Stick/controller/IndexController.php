@@ -21,7 +21,7 @@ class IndexController extends AbstractController
     {
         parent::preExecute();
         $view = new ViewManager;
-        $view->init();
+        $view->initialize();
         $this->setView($view);
     }
 
@@ -29,6 +29,13 @@ class IndexController extends AbstractController
     {
         parent::mainExecute();
         $this->getLogger()->info('Request URI = ' . Request::getUri());
+        if (count(Request::getGet()) > 0) {
+            $this->getLogger()->info('Request GET = ' . var_export(Request::getGet(), true));
+        }
+        if (count(Request::getPost()) > 0) {
+            $this->getLogger()->info('Request POST keys = ' . implode(', ', array_keys(Request::getPost())));
+            $this->getLogger()->debug('Request POST = ' . var_export(Request::getPost(), true));
+        }
 
         $config = Config::get()->getConfig($this, null, false);
         $controller_name = self::findControllerClass($config);
@@ -41,6 +48,12 @@ class IndexController extends AbstractController
         } else {
             throw new ControllerException('Cannot find controller');
         }
+    }
+
+    protected function postExecute()
+    {
+        parent::postExecute();
+        $this->getView()->execute();
     }
 
     protected function findControllerClass($config)
@@ -122,11 +135,5 @@ class IndexController extends AbstractController
             return $this->SearchControllerClass($controller_space, $notfound_controller_name);
         }
         return null;
-    }
-
-    protected function postExecute()
-    {
-        parent::postExecute();
-        $this->getView()->execute();
     }
 }

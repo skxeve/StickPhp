@@ -1,6 +1,6 @@
 <?php
 namespace Stick\config;
 
-class ConfigException extends \Exception
+class ConfigException extends \Stick\StickException
 {
 }

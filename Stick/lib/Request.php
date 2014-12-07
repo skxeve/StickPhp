@@ -1,10 +1,16 @@
 <?php
 namespace Stick\lib;
 
-class Request extends \Stick\AbstractObject
+class Request extends \Stick\AbstractStatic
 {
-    private function __construct()
+    public static function getGet()
     {
+        return $_GET;
+    }
+
+    public static function getPost()
+    {
+        return $_POST;
     }
 
     public static function getUri()
@@ -12,16 +18,16 @@ class Request extends \Stick\AbstractObject
         return array_shift(explode('?', getenv('REQUEST_URI')));
     }
 
-    public static function getUriArray()
+    public static function getUriArray($n = null)
     {
-        $uri = self::validateQuery(self::getUri());
-        $uri_array = explode('/', $uri);
+        $uri_array = explode('/', self::getUri());
         array_shift($uri_array);
-        return $uri_array;
-    }
-
-    public static function validateQuery($q)
-    {
-        return htmlspecialchars($q, ENT_QUOTES, 'UTF-8');
+        if ($n === null) {
+            return $uri_array;
+        } elseif (isset($uri_array[$n])) {
+            return $uri_array[$n];
+        } else {
+            return null;
+        }
     }
 }

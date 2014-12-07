@@ -1,36 +1,19 @@
 <?php
 namespace Stick\config;
 
-use Stick\dao\Ini;
+use Stick\dao\BaseIni;
+use Stick\lib\Error;
+use Stick\lib\Validate;
 
-class Config extends \Stick\AbstractObject
+class Config extends \Stick\AbstractSingletonObject
 {
-    const DEFAULT_LOG_CLASS = '\\Stick\\log\\Logger';
-    public static $log_instance = null;
-
-    protected static $instance = null;
-
-    public static function get()
-    {
-        if (!(self::$instance instanceof Config)) {
-            $config = new Config;
-            $config->init();
-            self::$instance = $config;
-        }
-        return self::$instance;
-    }
-
     protected $loaded = array();
     protected $data = array();
 
-    protected function __construct()
+    protected function initialize()
     {
-    }
-
-    protected function init()
-    {
-        if (defined('STICKPHP_CONFIG_INI_PATH')) {
-            $this->load(STICKPHP_CONFIG_INI_PATH);
+        if (defined('STICKPHP_CONFIG_PATH')) {
+            $this->load(STICKPHP_CONFIG_PATH);
         }
     }
 
@@ -48,24 +31,23 @@ class Config extends \Stick\AbstractObject
                 $this->load($item);
             }
         } else {
-            if (!isset($this->data[$path])) {
-                if (!is_readable($path)) {
-                    throw new ConfigException('Is not readable ' . var_export($path, true));
-                }
-                $ini = new Ini;
-                try {
-                    $ini->init($path);
-                } catch (\Stick\dao\DaoException $e) {
-                    throw new ConfigException('Catch DaoException: ' . $e->getMessage());
-                }
+            if (isset($this->data[$path])) {
+                return true;
+            }
+            if (!is_readable($path)) {
+                throw new ConfigException('Is not readable ' . var_export($path, true));
+            }
+            try {
+                $ini = new BaseIni;
+                $ini->initialize($path);
                 $this->data[$path] = $ini;
-                try {
-                    $this->load($ini->getValue('include'));
-                } catch (\Stick\dao\DaoException $e) {
+                if (($inc = $ini->getValue('include')) !== false) {
+                    $this->load($inc);
                 }
+            } catch (\Exception $e) {
+                throw new ConfigException(Error::catchException($e));
             }
         }
-        return $this;
     }
 
     /**
@@ -75,9 +57,9 @@ class Config extends \Stick\AbstractObject
      * @param string $section Section name
      * @param boolean $ex Exception flag(default true)
      *
-     * @throw ConfigException
+     * @return mixed
      */
-    public function getConfig($obj = null, $section = null, $ex = true)
+    public function getConfig($obj = null, $section = null)
     {
         $prefix = null;
         if ($obj instanceof \Stick\log\Logger) {
@@ -90,33 +72,23 @@ class Config extends \Stick\AbstractObject
             $prefix = (string)$obj;
         }
         if ($prefix !== null) {
-            return $this->findConfig($prefix, $section, $ex);
+            return $this->findConfig($prefix, $section);
         }
-        if ($ex) {
-            throw new ConfigException('Unexpected config parameter.');
-        } else {
-            return false;
-        }
+        return false;
     }
 
-    protected function findConfig($prefix, $section, $ex)
+    protected function findConfig($prefix, $section)
     {
         $key = $prefix;
-        if (!empty($section)) {
+        if (Validate::isEmpty($section) === false) {
             $key .= " $section";
         }
         $ret = null;
         foreach ($this->data as $path => $ini) {
-            try {
-                $ret = $ini->getValue($key);
+            if (($ret = $ini->getValue($key)) !== false) {
                 return $ret;
-            } catch (\Stick\dao\DaoException $e) {
             }
         }
-        if ($ex) {
-            throw new ConfigException('Cannot find config ' . var_export($key, true));
-        } else {
-            return false;
-        }
+        return false;
     }
 }

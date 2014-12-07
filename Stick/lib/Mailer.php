@@ -22,7 +22,7 @@ class Mailer extends \Stick\AbstractObject
         'body',
     );
 
-    public function init($default_from = null)
+    public function initialize($default_from = null)
     {
         $this->default_from = $default_from;
     }

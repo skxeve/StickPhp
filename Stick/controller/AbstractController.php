@@ -3,6 +3,7 @@ namespace Stick\controller;
 
 use Stick\manager\ViewManager;
 use Stick\lib\CalcTime;
+use Stick\lib\Error;
 
 abstract class AbstractController extends \Stick\AbstractObject
 {
@@ -19,7 +20,8 @@ abstract class AbstractController extends \Stick\AbstractObject
             $this->mainExecute();
             $this->postExecute();
         } catch (\Exception $e) {
-            $this->getLogger()->error('Catch ' . get_class($e) . ' : ' . $e->getMessage());
+            list($t, $m) = Error::catchException($e);
+            $this->getLogger()->error($m);
             $this->getLogger()->error($e->getTraceAsString());
             $this->getView()->errorExecute();
         }
@@ -60,5 +62,4 @@ abstract class AbstractController extends \Stick\AbstractObject
     {
         return $this->view;
     }
-
 }

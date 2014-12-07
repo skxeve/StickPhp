@@ -2,28 +2,26 @@
 namespace Stick\dao;
 
 use Stick\config\Config;
-use Stick\config\ConfigException;
 
 class Template extends \Stick\AbstractObject
 {
     protected $root;
     protected $path;
 
-    public function init($path, $section = null)
+    public function initialize($path = null, $section = null)
     {
+        if ($path === null) {
+            return;
+        }
         $this->root = array('');
-        try {
-            $config = Config::get()->getConfig($this);
-            if (isset($config['root'])) {
-                if (is_array($config['root'])) {
-                    $this->root = $config['root'];
-                } else {
-                    $this->root = array($config['root']);
-                }
-                $this->root[] = '';
+        $config = Config::get()->getConfig($this);
+        if (isset($config['root'])) {
+            if (is_array($config['root'])) {
+                $this->root = $config['root'];
+            } else {
+                $this->root = array($config['root']);
             }
-        } catch (ConfigException $e) {
-            $this->getLogger()->debug('Catch ConfigException: ' . $e->getMessage());
+            $this->root[] = '';
         }
         $this->path = null;
         foreach ($this->root as $root) {
