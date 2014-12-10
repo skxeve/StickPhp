@@ -68,6 +68,8 @@ class Config extends \Stick\AbstractSingletonObject
             $prefix = 'template';
         } elseif ($obj instanceof \Stick\controller\AbstractController) {
             $prefix = 'controller';
+        } elseif ($obj instanceof \Stick\dao\Database) {
+            $prefix = 'db';
         } elseif (is_string($obj)) {
             $prefix = (string)$obj;
         }
