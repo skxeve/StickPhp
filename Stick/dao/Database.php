@@ -6,7 +6,7 @@ use PDO;
 
 class Database extends BaseDatabase
 {
-    public function __construct($section = null)
+    public function initialize($section = null)
     {
         $config = Config::get()->getConfig($this, $section);
         if (!isset($config['user']) || !isset($config['pass'])) {
@@ -17,8 +17,7 @@ class Database extends BaseDatabase
         $db_port   = isset($config['port'])     ? $config['port']   : null;
         $db_name   = isset($config['dbname'])   ? $config['dbname'] : null;
         $db_char   = isset($config['char'])     ? $config['char']   : static::DEFAULT_DB_CHAR;
-        $dsn = static::generateDsn($db_engine, $db_host, $db_port, $db_name, $db_char);
-        $this->initialize($dsn, $config['user'], $config['pass']);
+        parent::initialize($config['user'], $config['pass'], $db_engine, $db_host, $db_port, $db_name, $db_char);
         $this->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
     }
 }

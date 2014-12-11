@@ -12,14 +12,12 @@ class BaseDatabase extends \Stick\AbstractObject
 
     protected $pdo;
 
-    public function __construct($user, $pass, $db_engine = null, $db_host = null, $db_port = null, $db_name = null, $db_char = null)
+    public function initialize($user = null, $pass = null, $db_engine = null, $db_host = null, $db_port = null, $db_name = null, $db_char = null)
     {
+        if ($user === null || $pass === null) {
+            return;
+        }
         $dsn = static::generateDsn($db_engine, $db_host, $db_port, $db_name, $db_char);
-        $this->initialize($dsn, $user, $pass);
-    }
-
-    protected function initialize($dsn, $user, $pass)
-    {
         try {
             $this->pdo = new PDO($dsn, $user, $pass);
         } catch (\Exception $e) {
