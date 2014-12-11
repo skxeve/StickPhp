@@ -12,8 +12,15 @@ class BaseDatabase extends \Stick\AbstractObject
 
     protected $pdo;
 
-    public function initialize($user = null, $pass = null, $db_engine = null, $db_host = null, $db_port = null, $db_name = null, $db_char = null)
-    {
+    public function initialize(
+        $user = null,
+        $pass = null,
+        $db_engine = null,
+        $db_host = null,
+        $db_port = null,
+        $db_name = null,
+        $db_char = null
+    ) {
         if ($user === null || $pass === null) {
             return;
         }
@@ -30,8 +37,13 @@ class BaseDatabase extends \Stick\AbstractObject
         return $this->pdo->setAttribute($attribute, $value);
     }
 
-    public static function generateDsn($db_engine = null, $db_host = null, $db_port = null, $db_name = null, $db_char = null)
-    {
+    public static function generateDsn(
+        $db_engine = null,
+        $db_host = null,
+        $db_port = null,
+        $db_name = null,
+        $db_char = null
+    ) {
         $db_engine = ($db_engine === null)  ? static::DEFAULT_DB_ENGINE : $db_engine;
         $db_host   = ($db_host === null)    ? static::DEFAULT_DB_HOST   : $db_host;
         $db_char   = ($db_char === null)    ? static::DEFAULT_DB_CHAR   : $db_char;
