@@ -30,6 +30,7 @@ class BatchController extends AbstractController
         } else {
             throw new ControllerException('Cannot find controller');
         }
+        unset($this->controller);
     }
 
     public function catchSignal($signo = 0)
