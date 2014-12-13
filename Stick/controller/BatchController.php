@@ -37,6 +37,7 @@ class BatchController extends AbstractController
     {
         switch ($signo) {
             case 0:
+                $this->getLogger()->notice('Catch return signal 0');
                 return;
             case SIGINT:
                 $this->getLogger()->notice('Catch signal SIGINT(CTRL+C)');
