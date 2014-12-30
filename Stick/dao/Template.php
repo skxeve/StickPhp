@@ -14,7 +14,7 @@ class Template extends \Stick\AbstractObject
             return;
         }
         $this->root = array('');
-        $config = Config::get()->getConfig($this);
+        $config = Config::get()->getConfig($this, $section);
         if (isset($config['root'])) {
             if (is_array($config['root'])) {
                 $this->root = $config['root'];

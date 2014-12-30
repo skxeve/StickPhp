@@ -16,6 +16,7 @@ class BatchController extends AbstractController
 
     protected function preExecute()
     {
+        usleep(100);
         parent::preExecute();
         declare(ticks = 1);
         pcntl_signal(SIGTERM, array($this, 'catchSignal'));

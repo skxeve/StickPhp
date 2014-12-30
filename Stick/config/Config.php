@@ -9,6 +9,7 @@ class Config extends \Stick\AbstractSingletonObject
 {
     protected $loaded = array();
     protected $data = array();
+    protected $tmp = array();
 
     protected function initialize()
     {
@@ -61,6 +62,25 @@ class Config extends \Stick\AbstractSingletonObject
      */
     public function getConfig($obj = null, $section = null)
     {
+        $prefix = $this->getPrefix($obj);
+        if ($prefix !== null) {
+            return $this->findConfig($prefix, $section);
+        }
+        return false;
+    }
+
+    public function setValue($obj, $section, $value)
+    {
+        $prefix = $this->getPrefix($obj);
+        $key = $prefix;
+        if (Validate::isEmpty($section) === false) {
+            $key .= " $section";
+        }
+        $this->tmp[$key] = $value;
+    }
+
+    protected function getPrefix($obj)
+    {
         $prefix = null;
         if ($obj instanceof \Stick\log\Logger) {
             $prefix = 'logger';
@@ -73,10 +93,7 @@ class Config extends \Stick\AbstractSingletonObject
         } elseif (is_string($obj)) {
             $prefix = (string)$obj;
         }
-        if ($prefix !== null) {
-            return $this->findConfig($prefix, $section);
-        }
-        return false;
+        return $prefix;
     }
 
     protected function findConfig($prefix, $section)
@@ -84,6 +101,9 @@ class Config extends \Stick\AbstractSingletonObject
         $key = $prefix;
         if (Validate::isEmpty($section) === false) {
             $key .= " $section";
+        }
+        if (isset($this->tmp[$key])) {
+            return $this->tmp[$key];
         }
         $ret = null;
         foreach ($this->data as $path => $ini) {

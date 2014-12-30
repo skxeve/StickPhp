@@ -104,7 +104,9 @@ class BaseDatabase extends \Stick\AbstractObject
             $this->getLogger()->debug('End bind value, todo execute.');
             $flag = $pdo_statement->execute();
             if ($flag === false) {
-                throw new DaoException('Failed to execute sql. errorinfo = ' . var_export($pdo_statement->errorInfo(), true));
+                throw new DaoException(
+                    'Failed to execute sql. errorinfo = ' . var_export($pdo_statement->errorInfo(), true)
+                );
             }
         } catch (\Exception $e) {
             $this->getLogger()->warning(Error::catchExceptionMessage($e));

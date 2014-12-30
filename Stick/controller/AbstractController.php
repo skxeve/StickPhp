@@ -20,10 +20,12 @@ abstract class AbstractController extends \Stick\AbstractObject
             $this->mainExecute();
             $this->postExecute();
         } catch (\Exception $e) {
-            list($t, $m) = Error::catchException($e);
-            $this->getLogger()->error($m);
+            $this->getLogger()->error(Error::catchExceptionMessage($e));
             $this->getLogger()->error($e->getTraceAsString());
-            $this->getView()->errorExecute();
+            $view = $this->getView();
+            if ($view instanceof ViewManager && method_exists($view, 'errorExecute')) {
+                $view->errorExecute();
+            }
         }
         $this->end_msec = microtime();
         $diff_msec = CalcTime::diffMicrotime($this->end_msec, $this->start_msec);
