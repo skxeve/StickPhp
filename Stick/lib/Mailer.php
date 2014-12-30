@@ -65,7 +65,7 @@ class Mailer extends \Stick\AbstractObject
             'headers'   => $additional_headers,
         );
         if ($result) {
-            $this->getLogger()->notice('Success to send mail, info = ' . var_export($param, true));
+            $this->getLogger()->debug('Success to send mail, info = ' . var_export($param, true));
         } else {
             $this->getLogger()->warning('Failed to send mail, info = ' . var_export($param, true));
         }
