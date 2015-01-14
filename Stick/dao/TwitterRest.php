@@ -10,6 +10,7 @@ class TwitterRest extends AbstractTwitter
         'friendships_create'    => 'https://api.twitter.com/1.1/friendships/create.json',
         'directmessage_new'     => 'https://api.twitter.com/1.1/direct_messages/new.json',
         'retweet'               => 'https://api.twitter.com/1.1/statuses/retweet/%s.json',
+        'statuses_show'         => 'https://api.twitter.com/1.1/statuses/show/%s.json',
     );
 
     protected $api_methods = array(
@@ -81,6 +82,15 @@ class TwitterRest extends AbstractTwitter
         return $this->execute(
             $url,
             'POST'
+        );
+    }
+
+    public function showStatuses($id)
+    {
+        $url = sprintf($this->api_urls['statuses_show'], $id);
+        return $this->execute(
+            $url,
+            'GET'
         );
     }
 
