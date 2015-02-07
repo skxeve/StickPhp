@@ -9,11 +9,22 @@ abstract class AbstractTwitter extends \Stick\AbstractObject
 
     public function initialize($section = null)
     {
-        $this->config = Config::get()->getConfig('twitter', $section);
+        $config = Config::get()->getConfig('twitter', is_array($section) ? null : $section);
+        if (is_array($section)) {
+            $this->config = array_merge($config, $section);
+        } else {
+            $this->config = $config;
+        }
         // Check
-        foreach (array('consumer_key', 'consumer_secret', 'access_token', 'access_token_secret') as $key) {
+        foreach (array('consumer_key', 'consumer_secret') as $key) {
             if (!isset($this->config[$key])) {
                 throw new DaoException('Undefined config key ' . $key);
+            }
+        }
+        // Fill blank
+        foreach (array('access_token', 'access_token_secret') as $key) {
+            if (!isset($this->config[$key])) {
+                $this->config[$key] = '';
             }
         }
     }
