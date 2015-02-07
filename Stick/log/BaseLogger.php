@@ -20,7 +20,7 @@ class BaseLogger extends AbstractLogger
     const DEFAULT_PATH = 'php://stderr';
     const DEFAULT_LEVEL = 1;
     const DEFAULT_DATE = 'Y/m/d H:i:s';
-    const DEFAULT_FORMAT = "[%05d] %s %s [%s] %s\n";
+    const DEFAULT_FORMAT = "[%05d] %s [%s] %s";
     const DEFAULT_TRACE = 3;
 
     protected $pid;
@@ -69,11 +69,6 @@ class BaseLogger extends AbstractLogger
         } else {
             $trace_pos = ':';
         }
-        if (isset($trace_array[1]['class']) && isset($trace_array[1]['type']) && isset($trace_array[1]['method'])) {
-
-        } else {
-            $trace_class = '';
-        }
         $line_array = explode("\n", preg_replace("/\r\n/", "\n", $message));
         for ($i = 0; $i < count($line_array); $i++) {
             $line = $line_array[$i];
@@ -81,11 +76,14 @@ class BaseLogger extends AbstractLogger
                 $this->format,
                 $this->pid,
                 date($this->date),
-                $trace_class,
                 strtoupper($level_str),
                 $line
             );
-            file_put_contents($this->path, $log, FILE_APPEND | LOCK_EX);
+            if (($i + 1) !== count($line_array)) {
+                file_put_contents($this->path, $log . "\n", FILE_APPEND | LOCK_EX);
+            } else {
+                file_put_contents($this->path, $log . "\t" . '@ ' . $trace_pos . "\n", FILE_APPEND | LOCK_EX);
+            }
         }
     }
 }
